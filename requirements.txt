@@ -1,7 +1,2 @@
-streamlit
-matplotlib
-seaborn
-pandas
-ipython
-ipykernel
-jupyter
+streamlit>=1.40,<2.0
+pandas>=2.2,<3.0
