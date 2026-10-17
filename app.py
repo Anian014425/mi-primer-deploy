@@ -1,65 +1,713 @@
 from pathlib import Path
 
 import pandas as pd
+import plotly.express as px
 import streamlit as st
 
-# Ruta del CSV incluido con el proyecto
-DATA_PATH = Path(__file__).parent / "data" / "ejemplo.csv"
-
+# ------------------------------------------------------------
+# Configuración general
+# ------------------------------------------------------------
 st.set_page_config(
-    page_title="Mi primer deploy",
-    page_icon="📊",
+    page_title="Café Gourmet | Dashboard de ventas",
+    page_icon="☕",
     layout="wide",
 )
 
-st.title("📊 Mi primer deploy")
-st.write(
-    "Una aplicación interactiva en Python para explorar archivos CSV. "
-    "Puedes empezar con los datos de ejemplo o cargar tu propio archivo."
+BASE_DIR = Path(__file__).resolve().parent
+DATA_PATH = BASE_DIR / "data" / "datos.csv"
+
+st.title("☕ Café Gourmet | Centro de inteligencia")
+st.subheader("✨ Cada taza cuenta una historia: explora el rendimiento de tu cafetería")
+st.markdown(
+    "Analiza ingresos, preferencias de compra y comportamiento de las ventas "
+    "con este panel interactivo."
 )
 
-uploaded_file = st.file_uploader("Carga un archivo CSV", type=["csv"])
-use_example = st.checkbox("Usar el archivo de ejemplo", value=uploaded_file is None)
+# ------------------------------------------------------------
+# Carga y validación de datos
+# ------------------------------------------------------------
+@st.cache_data
+def load_data(path: str) -> pd.DataFrame:
+    data = pd.read_csv(path)
+    if "fecha_venta" in data.columns:
+        data["fecha_venta"] = pd.to_datetime(data["fecha_venta"], errors="coerce")
+    for col in ["ventas_totales", "precio_unitario", "costo_total", "cantidad",
+                "satisfaccion", "tiempo_preparacion_min"]:
+        if col in data.columns:
+            data[col] = pd.to_numeric(data[col], errors="coerce")
+    for col in ["es_cliente_frecuente", "es_pedido_para_llevar", "tiene_descuento"]:
+        if col in data.columns:
+            # Admite booleanos CSV true/false y valores equivalentes en español.
+            data[col] = (
+                data[col].astype(str).str.strip().str.lower()
+                .map({"true": True, "false": False, "1": True, "0": False,
+                      "sí": True, "si": True, "no": False})
+                .astype("boolean")
+            )
+    return data
 
-df = None
+if not DATA_PATH.exists():
+    st.error(
+        f"No se encontró el archivo: `{DATA_PATH}`. "
+        "Guarda tu CSV como `data/datos.csv` dentro de la carpeta del proyecto."
+    )
+    st.info(
+        "Si estás usando el archivo generado anteriormente, copia "
+        "`ventas_cafeteria_gourmet.csv` a la carpeta `data` y cámbiale el nombre a `datos.csv`."
+    )
+    st.stop()
 
 try:
-    if uploaded_file is not None and not use_example:
-        df = pd.read_csv(uploaded_file)
-    elif use_example:
-        if DATA_PATH.exists():
-            df = pd.read_csv(DATA_PATH)
-        else:
-            st.error(f"No se encontró el archivo de ejemplo: {DATA_PATH}")
-except (pd.errors.ParserError, UnicodeDecodeError, OSError) as exc:
-    st.error(f"No se pudo leer el CSV. Revisa el formato del archivo. Detalle: {exc}")
+    df = load_data(str(DATA_PATH))
+except Exception as exc:
+    st.error(f"No fue posible leer el CSV. Verifica que esté separado por comas. Detalle: {exc}")
+    st.stop()
 
-if df is not None:
-    st.subheader("Vista previa")
-    st.dataframe(df.head(20), use_container_width=True)
+if df.empty:
+    st.warning("El archivo CSV no contiene registros.")
+    st.stop()
 
-    st.subheader("Resumen del conjunto de datos")
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Filas", f"{df.shape[0]:,}")
-    col2.metric("Columnas", f"{df.shape[1]:,}")
-    col3.metric("Valores ausentes", f"{int(df.isna().sum().sum()):,}")
+# Validar columnas necesarias para los gráficos
+required = ["ventas_totales", "producto", "categoria"]
+missing = [col for col in required if col not in df.columns]
+if missing:
+    st.error(
+        "Faltan columnas necesarias para este dashboard: "
+        + ", ".join(f"`{col}`" for col in missing)
+        + ". Revisa los encabezados de `data/datos.csv`."
+    )
+    st.stop()
 
-    with st.expander("Estadísticas descriptivas"):
-        st.dataframe(df.describe(include="all").transpose(), use_container_width=True)
+# ------------------------------------------------------------
+# Filtros
+# ------------------------------------------------------------
+st.sidebar.header("🎛️ Filtros del dashboard")
+filtered = df.copy()
 
-    with st.expander("Tipos de datos y valores ausentes"):
-        summary = pd.DataFrame({
-            "tipo_de_dato": df.dtypes.astype(str),
-            "valores_ausentes": df.isna().sum(),
-        })
-        st.dataframe(summary, use_container_width=True)
+if "fecha_venta" in filtered.columns and filtered["fecha_venta"].notna().any():
+    valid_dates = filtered["fecha_venta"].dropna()
+    min_date = valid_dates.min().date()
+    max_date = valid_dates.max().date()
+    selected_dates = st.sidebar.date_input(
+        "📅 Periodo de ventas",
+        value=(min_date, max_date),
+        min_value=min_date,
+        max_value=max_date,
+    )
+    if isinstance(selected_dates, (tuple, list)) and len(selected_dates) == 2:
+        start_date, end_date = selected_dates
+        filtered = filtered[
+            filtered["fecha_venta"].dt.date.between(start_date, end_date)
+        ]
 
-    csv_bytes = df.to_csv(index=False).encode("utf-8")
+for col, label in [
+    ("sucursal", "🏬 Sucursal"),
+    ("categoria", "☕ Categoría"),
+    ("producto", "🥐 Producto"),
+    ("metodo_pago", "💳 Método de pago"),
+]:
+    if col in filtered.columns:
+        choices = sorted(filtered[col].dropna().astype(str).unique().tolist())
+        selected = st.sidebar.multiselect(
+            label,
+            options=choices,
+            default=choices,
+            help="Selecciona uno o varios valores.",
+        )
+        filtered = filtered[filtered[col].astype(str).isin(selected)]
+
+bool_labels = {
+    "es_cliente_frecuente": "⭐ Solo clientes frecuentes",
+    "es_pedido_para_llevar": "🥡 Solo pedidos para llevar",
+    "tiene_descuento": "🏷️ Solo ventas con descuento",
+}
+for col, label in bool_labels.items():
+    if col in filtered.columns:
+        only_true = st.sidebar.checkbox(label, value=False)
+        if only_true:
+            filtered = filtered[filtered[col] == True]  # noqa: E712
+
+st.sidebar.caption("Los gráficos y los indicadores se actualizan con los filtros seleccionados.")
+
+# ------------------------------------------------------------
+# Indicadores principales
+# ------------------------------------------------------------
+st.markdown("### 📌 Resumen ejecutivo")
+total_sales = filtered["ventas_totales"].sum()
+num_sales = len(filtered)
+avg_ticket = total_sales / num_sales if num_sales else 0
+units = filtered["cantidad"].sum() if "cantidad" in filtered.columns else 0
+
+k1, k2, k3, k4 = st.columns(4)
+k1.metric("💰 Ventas totales", f"${total_sales:,.2f} MXN")
+k2.metric("🧾 Transacciones", f"{num_sales:,}")
+k3.metric("🛍️ Unidades vendidas", f"{units:,.0f}")
+k4.metric("🎟️ Ticket promedio", f"${avg_ticket:,.2f} MXN")
+
+st.divider()
+
+if filtered.empty:
+    st.warning("No hay registros para la combinación de filtros seleccionada. Modifica los filtros.")
+    st.stop()
+
+# ------------------------------------------------------------
+# Gráfico 1: barras horizontales de ventas por producto
+# ------------------------------------------------------------
+st.markdown("### 📊 1. ¿Qué productos generan más ventas?")
+sales_by_product = (
+    filtered.groupby("producto", as_index=False)["ventas_totales"]
+    .sum()
+    .sort_values("ventas_totales", ascending=True)
+)
+fig_bar = px.bar(
+    sales_by_product,
+    x="ventas_totales",
+    y="producto",
+    orientation="h",
+    color="ventas_totales",
+    color_continuous_scale="Teal",
+    labels={"ventas_totales": "Ventas (MXN)", "producto": "Producto"},
+    title="Ingresos por producto",
+    template="plotly_white",
+)
+fig_bar.update_layout(
+    height=480,
+    margin=dict(l=10, r=20, t=65, b=20),
+    coloraxis_showscale=False,
+    xaxis_title="Ventas totales (MXN)",
+    yaxis_title="",
+)
+fig_bar.update_traces(hovertemplate="<b>%{y}</b><br>Ventas: $%{x:,.2f} MXN<extra></extra>")
+st.plotly_chart(fig_bar, use_container_width=True)
+
+left, right = st.columns(2, gap="large")
+
+# ------------------------------------------------------------
+# Gráfico 2: donut por categoría
+# ------------------------------------------------------------
+with left:
+    st.markdown("### 🍩 2. Participación por categoría")
+    pie_data = (
+        filtered.groupby("categoria", as_index=False)["ventas_totales"]
+        .sum()
+        .sort_values("ventas_totales", ascending=False)
+    )
+    fig_pie = px.pie(
+        pie_data,
+        names="categoria",
+        values="ventas_totales",
+        hole=0.52,
+        color_discrete_sequence=px.colors.qualitative.Set2,
+        title="Distribución de ingresos",
+        template="plotly_white",
+    )
+    fig_pie.update_traces(
+        textposition="inside",
+        textinfo="percent+label",
+        hovertemplate="<b>%{label}</b><br>Ventas: $%{value:,.2f} MXN<br>Participación: %{percent}<extra></extra>",
+    )
+    fig_pie.update_layout(
+        height=430,
+        margin=dict(l=10, r=10, t=65, b=15),
+        legend_title_text="Categoría",
+    )
+    st.plotly_chart(fig_pie, use_container_width=True)
+
+# ------------------------------------------------------------
+# Gráfico 3: histograma de importes de venta
+# ------------------------------------------------------------
+with right:
+    st.markdown("### 📈 3. Distribución de los importes")
+    fig_hist = px.histogram(
+        filtered,
+        x="ventas_totales",
+        nbins=20,
+        color_discrete_sequence=["#168C82"],
+        labels={"ventas_totales": "Importe de venta (MXN)", "count": "Número de ventas"},
+        title="Frecuencia de importes por transacción",
+        template="plotly_white",
+    )
+    fig_hist.update_layout(
+        height=430,
+        margin=dict(l=10, r=10, t=65, b=15),
+        xaxis_title="Importe de venta (MXN)",
+        yaxis_title="Número de transacciones",
+        bargap=0.08,
+    )
+    fig_hist.update_traces(
+        hovertemplate="Importe: %{x}<br>Transacciones: %{y}<extra></extra>"
+    )
+    st.plotly_chart(fig_hist, use_container_width=True)
+
+# ------------------------------------------------------------
+# Vista previa interactiva
+# ------------------------------------------------------------
+st.divider()
+show_preview = st.checkbox("🔎 Mostrar vista previa interactiva de los datos filtrados", value=False)
+if show_preview:
+    st.markdown("### 🧾 Vista previa de los datos")
+    st.caption(f"Se muestran hasta 10 filas de {len(filtered):,} registros filtrados.")
+    st.dataframe(filtered.head(10), use_container_width=True, hide_index=True)
+
+    csv_data = filtered.to_csv(index=False).encode("utf-8-sig")
     st.download_button(
-        label="Descargar datos como CSV",
-        data=csv_bytes,
-        file_name="datos_explorados.csv",
+        "⬇️ Descargar datos filtrados (CSV)",
+        data=csv_data,
+        file_name="ventas_filtradas.csv",
         mime="text/csv",
     )
-else:
-    st.info("Carga un archivo CSV o selecciona la opción para usar el archivo de ejemplo.")
+
+st.caption("Dashboard de práctica · Datos simulados de cafetería gourmet · Python + Streamlit + Plotly Express")
+#------------------------------------------
+
+from pathlib import Path
+
+import pandas as pd
+import plotly.express as px
+import streamlit as st
+
+
+# --------------------------------------------------
+# 1. Configuración general de la aplicación
+# --------------------------------------------------
+st.set_page_config(
+    page_title="Dashboard | Cafetería Gourmet",
+    page_icon="☕",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+
+# --------------------------------------------------
+# 2. Diseño visual con CSS
+# --------------------------------------------------
+st.markdown(
+    """
+    <style>
+        .main {
+            background-color: #FAF7F2;
+        }
+
+        h1 {
+            color: #5B3924;
+            font-weight: 800;
+        }
+
+        h2, h3 {
+            color: #754C30;
+        }
+
+        [data-testid="stMetric"] {
+            background-color: #FFFFFF;
+            border: 1px solid #E7D9C8;
+            padding: 18px;
+            border-radius: 12px;
+        }
+
+        div[data-testid="stPlotlyChart"] {
+            background-color: #FFFFFF;
+            border-radius: 12px;
+            padding: 8px;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+
+# --------------------------------------------------
+# 3. Carga de datos
+# --------------------------------------------------
+RUTA_DATOS = Path("data/datos.csv")
+
+
+@st.cache_data
+def cargar_datos(ruta):
+    """Carga el CSV y prepara las columnas necesarias."""
+    df = pd.read_csv(ruta)
+
+    # Elimina espacios accidentales en los nombres
+    df.columns = df.columns.str.strip()
+
+    # Convierte las fechas, si existe la columna
+    if "fecha_venta" in df.columns:
+        df["fecha_venta"] = pd.to_datetime(
+            df["fecha_venta"], errors="coerce"
+        )
+
+    # Convierte las ventas a valores numéricos
+    if "ventas_totales" in df.columns:
+        df["ventas_totales"] = pd.to_numeric(
+            df["ventas_totales"], errors="coerce"
+        )
+
+    return df
+
+
+if not RUTA_DATOS.exists():
+    st.error(
+        "No se encontró el archivo data/datos.csv. "
+        "Verifica que exista la carpeta data y que el CSV "
+        "tenga ese nombre."
+    )
+    st.stop()
+
+
+try:
+    df = cargar_datos(str(RUTA_DATOS))
+except Exception as error:
+    st.error(f"No fue posible cargar el archivo CSV: {error}")
+    st.stop()
+
+
+if df.empty:
+    st.warning("El archivo CSV no contiene registros.")
+    st.stop()
+
+
+# --------------------------------------------------
+# 4. Título y subtítulo
+# --------------------------------------------------
+st.title("☕ Café & Datos: Dashboard Gourmet")
+st.subheader(
+    "📊 Descubre tus productos estrella, analiza tus ventas "
+    "y transforma los datos en decisiones inteligentes."
+)
+
+st.markdown(
+    "Explora el rendimiento de tu cafetería con filtros "
+    "interactivos y visualizaciones que se actualizan en tiempo real."
+)
+
+st.divider()
+
+
+# --------------------------------------------------
+# 5. Validación de columnas necesarias
+# --------------------------------------------------
+columnas_requeridas = [
+    "ventas_totales",
+    "producto",
+    "categoria"
+]
+
+faltantes = [
+    columna
+    for columna in columnas_requeridas
+    if columna not in df.columns
+]
+
+if faltantes:
+    st.error(
+        "Faltan estas columnas necesarias en el CSV: "
+        + ", ".join(faltantes)
+    )
+    st.write("Columnas encontradas:", df.columns.tolist())
+    st.stop()
+
+
+# --------------------------------------------------
+# 6. Barra lateral: filtros interactivos
+# --------------------------------------------------
+st.sidebar.header("🎛️ Panel de filtros")
+st.sidebar.caption("Personaliza los datos que quieres analizar.")
+
+df_filtrado = df.copy()
+
+# Filtro por categoría
+categorias = sorted(
+    df["categoria"].dropna().astype(str).unique().tolist()
+)
+
+categorias_seleccionadas = st.sidebar.multiselect(
+    "🛍️ Selecciona las categorías",
+    options=categorias,
+    default=categorias,
+    help="Puedes seleccionar una o varias categorías."
+)
+
+df_filtrado = df_filtrado[
+    df_filtrado["categoria"].astype(str).isin(
+        categorias_seleccionadas
+    )
+]
+
+# Filtro por producto
+productos = sorted(
+    df_filtrado["producto"].dropna().astype(str).unique().tolist()
+)
+
+productos_seleccionados = st.sidebar.multiselect(
+    "🍰 Selecciona los productos",
+    options=productos,
+    default=productos
+)
+
+df_filtrado = df_filtrado[
+    df_filtrado["producto"].astype(str).isin(
+        productos_seleccionados
+    )
+]
+
+# Filtro opcional por sucursal
+if "sucursal" in df_filtrado.columns:
+    sucursales = sorted(
+        df_filtrado["sucursal"].dropna().astype(str).unique().tolist()
+    )
+
+    sucursales_seleccionadas = st.sidebar.multiselect(
+        "📍 Selecciona las sucursales",
+        options=sucursales,
+        default=sucursales
+    )
+
+    df_filtrado = df_filtrado[
+        df_filtrado["sucursal"].astype(str).isin(
+            sucursales_seleccionadas
+        )
+    ]
+
+# Filtro opcional por método de pago
+if "metodo_pago" in df_filtrado.columns:
+    metodos_pago = sorted(
+        df_filtrado["metodo_pago"].dropna().astype(str).unique().tolist()
+    )
+
+    metodos_seleccionados = st.sidebar.multiselect(
+        "💳 Método de pago",
+        options=metodos_pago,
+        default=metodos_pago
+    )
+
+    df_filtrado = df_filtrado[
+        df_filtrado["metodo_pago"].astype(str).isin(
+            metodos_seleccionados
+        )
+    ]
+
+# Checkbox: solo ventas con descuento
+if "tiene_descuento" in df_filtrado.columns:
+    solo_descuentos = st.sidebar.checkbox(
+        "🏷️ Mostrar solo ventas con descuento",
+        value=False
+    )
+
+    if solo_descuentos:
+        descuentos = (
+            df_filtrado["tiene_descuento"]
+            .astype(str)
+            .str.strip()
+            .str.lower()
+            .isin(["true", "1", "si", "sí", "yes"])
+        )
+        df_filtrado = df_filtrado[descuentos]
+
+st.sidebar.divider()
+
+if st.sidebar.button("🔄 Restablecer filtros"):
+    st.rerun()
+
+
+# --------------------------------------------------
+# 7. Indicadores principales (KPI)
+# --------------------------------------------------
+if df_filtrado.empty:
+    st.warning(
+        "No hay ventas que coincidan con los filtros seleccionados. "
+        "Modifica los filtros de la barra lateral."
+    )
+    st.stop()
+
+ventas_totales = df_filtrado["ventas_totales"].sum()
+numero_ventas = len(df_filtrado)
+ticket_promedio = df_filtrado["ventas_totales"].mean()
+
+col1, col2, col3 = st.columns(3)
+
+col1.metric(
+    "💰 Ventas totales",
+    f"${ventas_totales:,.2f}"
+)
+
+col2.metric(
+    "🧾 Número de registros",
+    f"{numero_ventas:,}"
+)
+
+col3.metric(
+    "☕ Venta promedio",
+    f"${ticket_promedio:,.2f}"
+)
+
+st.divider()
+
+
+# --------------------------------------------------
+# 8. Gráfico 1: barras horizontales por producto
+# --------------------------------------------------
+st.subheader("🏆 1. Productos con mayores ventas")
+
+ventas_producto = (
+    df_filtrado.groupby("producto", as_index=False)
+    ["ventas_totales"]
+    .sum()
+    .sort_values("ventas_totales", ascending=True)
+)
+
+fig_barras = px.bar(
+    ventas_producto,
+    x="ventas_totales",
+    y="producto",
+    orientation="h",
+    title="Ventas totales por producto",
+    labels={
+        "ventas_totales": "Ventas ($)",
+        "producto": "Producto"
+    },
+    color="ventas_totales",
+    color_continuous_scale="YlOrBr",
+    hover_data={"ventas_totales": ":,.2f"}
+)
+
+fig_barras.update_layout(
+    template="plotly_white",
+    height=max(400, len(ventas_producto) * 32),
+    margin=dict(l=20, r=20, t=70, b=30),
+    coloraxis_showscale=False,
+    xaxis_tickprefix="$",
+    xaxis_tickformat=",.0f"
+)
+
+st.plotly_chart(
+    fig_barras,
+    use_container_width=True
+)
+
+
+# --------------------------------------------------
+# 9. Gráfico 2: dona de ventas por categoría
+# --------------------------------------------------
+st.subheader("🍩 2. Distribución de ventas por categoría")
+
+ventas_categoria = (
+    df_filtrado.groupby("categoria", as_index=False)
+    ["ventas_totales"]
+    .sum()
+    .sort_values("ventas_totales", ascending=False)
+)
+
+fig_dona = px.pie(
+    ventas_categoria,
+    names="categoria",
+    values="ventas_totales",
+    hole=0.55,
+    title="Participación de cada categoría",
+    color_discrete_sequence=px.colors.qualitative.Set3
+)
+
+fig_dona.update_traces(
+    textposition="inside",
+    textinfo="percent+label",
+    hovertemplate=(
+        "<b>%{label}</b><br>"
+        "Ventas: $%{value:,.2f}<br>"
+        "Participación: %{percent}"
+        "<extra></extra>"
+    )
+)
+
+fig_dona.update_layout(
+    template="plotly_white",
+    height=480,
+    margin=dict(l=20, r=20, t=70, b=20),
+    legend_title_text="Categoría"
+)
+
+st.plotly_chart(
+    fig_dona,
+    use_container_width=True
+)
+
+
+# --------------------------------------------------
+# 10. Gráfico 3: histograma de ventas
+# --------------------------------------------------
+st.subheader("📈 3. Distribución de los importes de venta")
+
+fig_histograma = px.histogram(
+    df_filtrado,
+    x="ventas_totales",
+    nbins=20,
+    title="Frecuencia de los importes de venta",
+    labels={
+        "ventas_totales": "Importe de venta ($)",
+        "count": "Número de registros"
+    },
+    color_discrete_sequence=["#B87942"],
+    marginal="box",
+    hover_data=["producto"]
+)
+
+fig_histograma.update_layout(
+    template="plotly_white",
+    height=480,
+    margin=dict(l=20, r=20, t=70, b=30),
+    xaxis_tickprefix="$",
+    xaxis_tickformat=",.0f",
+    yaxis_title="Número de registros"
+)
+
+st.plotly_chart(
+    fig_histograma,
+    use_container_width=True
+)
+
+
+# --------------------------------------------------
+# 11. Vista previa interactiva del DataFrame filtrado
+# --------------------------------------------------
+st.divider()
+st.subheader("🔎 Explora los datos")
+
+mostrar_datos = st.checkbox(
+    "Mostrar vista previa de los datos filtrados",
+    value=False
+)
+
+if mostrar_datos:
+    cantidad_filas = st.selectbox(
+        "¿Cuántas filas deseas visualizar?",
+        options=[5, 10],
+        index=1
+    )
+
+    st.caption(
+        f"Mostrando hasta {cantidad_filas} filas "
+        f"de {len(df_filtrado):,} registros filtrados."
+    )
+
+    st.dataframe(
+        df_filtrado.head(cantidad_filas),
+        use_container_width=True,
+        hide_index=True
+    )
+
+    # Permite descargar todos los datos filtrados
+    csv_filtrado = df_filtrado.to_csv(index=False).encode("utf-8-sig")
+
+    st.download_button(
+        label="📥 Descargar todos los datos filtrados",
+        data=csv_filtrado,
+        file_name="ventas_filtradas.csv",
+        mime="text/csv"
+    )
+
+
+# --------------------------------------------------
+# 12. Pie de página
+# --------------------------------------------------
+st.divider()
+st.caption(
+    "☕ Dashboard de análisis de ventas | "
+    "Python · Streamlit · Pandas · Plotly Express"
+)

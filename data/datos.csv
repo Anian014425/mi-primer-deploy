@@ -1,0 +1,151 @@
+﻿id_venta,fecha_venta,dia_semana,sucursal,id_cliente,producto,categoria,precio_unitario,cantidad,ventas_totales,costo_total,metodo_pago,satisfaccion,tiempo_preparacion_min,es_cliente_frecuente,es_pedido_para_llevar,tiene_descuento
+V0001,2026-03-23,lunes,Roma Norte,C072,Americano,Café,49.40,2,83.98,36.00,Tarjeta,4,4,true,true,true
+V0002,2026-01-26,lunes,Roma Norte,C044,Panqué de limón,Panadería,42.75,2,85.50,34.00,Transferencia,5,3,false,true,false
+V0003,2026-02-05,jueves,Polanco,C011,Cappuccino,Café,68.00,3,183.60,72.00,Transferencia,5,5,true,true,true
+V0004,2026-03-12,jueves,Roma Norte,C011,Latte vainilla,Café,72.20,2,144.40,54.00,Billetera digital,2,4,false,true,false
+V0005,2026-01-30,viernes,Condesa,C069,Brownie de chocolate,Postres,55.00,1,55.00,22.00,Efectivo,3,4,false,false,false
+V0006,2026-02-01,domingo,Polanco,C005,Cappuccino,Café,68.00,1,68.00,24.00,Efectivo,5,8,false,false,false
+V0007,2026-02-10,martes,Condesa,C018,Cold brew,Café frío,74.00,1,74.00,26.00,Billetera digital,5,2,false,true,false
+V0008,2026-02-01,domingo,Polanco,C012,Panqué de limón,Panadería,45.00,1,45.00,17.00,Transferencia,3,5,false,true,false
+V0009,2026-01-07,miércoles,Polanco,C015,Brownie de chocolate,Postres,57.75,1,57.75,22.00,Tarjeta,4,6,true,false,false
+V0010,2026-03-29,domingo,Polanco,C065,Brownie de chocolate,Postres,55.00,2,110.00,44.00,Billetera digital,4,4,false,true,false
+V0011,2026-01-23,viernes,Polanco,C077,Frappé moka,Café frío,89.00,1,89.00,33.00,Tarjeta,3,7,false,false,false
+V0012,2026-02-11,miércoles,Polanco,C011,Frappé moka,Café frío,89.00,1,89.00,33.00,Tarjeta,2,5,true,false,false
+V0013,2026-03-04,miércoles,Roma Norte,C040,Cheesecake frutos rojos,Postres,78.00,4,312.00,128.00,Efectivo,4,10,false,true,false
+V0014,2026-02-21,sábado,Roma Norte,C076,Toast de aguacate,Alimentos,128.00,2,256.00,122.00,Efectivo,2,8,false,true,false
+V0015,2026-01-29,jueves,Condesa,C032,Espresso doble,Café,45.60,2,82.08,34.00,Transferencia,4,2,true,true,true
+V0016,2026-03-02,lunes,Roma Norte,C008,Cheesecake frutos rojos,Postres,81.90,1,81.90,32.00,Tarjeta,5,9,true,true,false
+V0017,2026-02-21,sábado,Polanco,C071,Panqué de limón,Panadería,45.00,2,90.00,34.00,Transferencia,4,2,true,true,false
+V0018,2026-01-13,martes,Condesa,C052,Espresso doble,Café,48.00,4,192.00,68.00,Efectivo,3,5,false,false,false
+V0019,2026-01-08,jueves,Condesa,C020,Cappuccino,Café,68.00,1,68.00,24.00,Transferencia,4,9,false,false,false
+V0020,2026-01-25,domingo,Condesa,C008,Flat white,Café,68.40,4,273.60,100.00,Efectivo,2,3,false,true,false
+V0021,2026-03-07,sábado,Roma Norte,C054,Americano,Café,49.40,1,49.40,18.00,Tarjeta,5,2,false,false,false
+V0022,2026-03-26,jueves,Roma Norte,C059,Matcha latte,Té e infusiones,82.00,1,82.00,29.00,Billetera digital,4,5,false,true,false
+V0023,2026-02-10,martes,Polanco,C032,Sándwich artesanal,Alimentos,109.25,3,327.75,162.00,Tarjeta,3,10,true,false,false
+V0024,2026-02-17,martes,Condesa,C018,Latte vainilla,Café,72.20,1,72.20,27.00,Tarjeta,5,7,false,true,false
+V0025,2026-02-03,martes,Condesa,C012,Americano,Café,52.00,1,52.00,18.00,Tarjeta,3,3,false,true,false
+V0026,2026-03-23,lunes,Condesa,C072,Cold brew,Café frío,74.00,1,74.00,26.00,Transferencia,3,2,true,false,false
+V0027,2026-01-02,viernes,Polanco,C046,Americano,Café,52.00,3,140.40,54.00,Tarjeta,4,6,false,true,true
+V0028,2026-01-27,martes,Roma Norte,C023,Croissant de mantequilla,Panadería,49.00,2,98.00,40.00,Efectivo,5,4,true,true,false
+V0029,2026-02-22,domingo,Polanco,C029,Espresso doble,Café,48.00,2,96.00,34.00,Transferencia,4,3,true,false,false
+V0030,2026-01-26,lunes,Roma Norte,C036,Cheesecake frutos rojos,Postres,78.00,1,74.10,32.00,Tarjeta,4,7,true,false,true
+V0031,2026-02-14,sábado,Polanco,C014,Croissant de mantequilla,Panadería,46.55,1,46.55,20.00,Tarjeta,5,3,false,true,false
+V0032,2026-03-18,miércoles,Roma Norte,C056,Cold brew,Café frío,77.70,2,155.40,52.00,Tarjeta,5,4,true,false,false
+V0033,2026-01-01,jueves,Roma Norte,C085,Té chai latte,Té e infusiones,70.00,2,140.00,46.00,Billetera digital,4,7,false,false,false
+V0034,2026-01-16,viernes,Roma Norte,C023,Panqué de limón,Panadería,45.00,1,45.00,17.00,Transferencia,4,3,true,true,false
+V0035,2026-03-20,viernes,Condesa,C085,Té chai latte,Té e infusiones,70.00,1,70.00,23.00,Efectivo,4,4,false,true,false
+V0036,2026-01-11,domingo,Roma Norte,C019,Latte vainilla,Café,76.00,2,152.00,54.00,Efectivo,5,6,false,true,false
+V0037,2026-01-04,domingo,Roma Norte,C014,Espresso doble,Café,48.00,4,192.00,68.00,Tarjeta,5,2,false,false,false
+V0038,2026-02-24,martes,Polanco,C057,Cappuccino,Café,64.60,2,129.20,48.00,Billetera digital,4,6,false,true,false
+V0039,2026-03-20,viernes,Roma Norte,C067,Cheesecake frutos rojos,Postres,78.00,3,234.00,96.00,Billetera digital,5,7,false,false,false
+V0040,2026-03-04,miércoles,Roma Norte,C030,Matcha latte,Té e infusiones,82.00,1,82.00,29.00,Efectivo,5,6,true,true,false
+V0041,2026-02-19,jueves,Polanco,C074,Croissant de mantequilla,Panadería,51.45,2,102.90,40.00,Tarjeta,2,4,true,true,false
+V0042,2026-02-18,miércoles,Polanco,C063,Frappé moka,Café frío,93.45,3,280.35,99.00,Efectivo,4,6,true,true,false
+V0043,2026-01-29,jueves,Condesa,C076,Latte vainilla,Café,76.00,1,76.00,27.00,Transferencia,5,9,false,false,false
+V0044,2026-03-14,sábado,Roma Norte,C044,Croissant de mantequilla,Panadería,49.00,1,49.00,20.00,Billetera digital,4,2,false,false,false
+V0045,2026-02-18,miércoles,Polanco,C004,Latte vainilla,Café,72.20,3,216.60,81.00,Tarjeta,5,5,false,false,false
+V0046,2026-02-01,domingo,Roma Norte,C022,Cappuccino,Café,68.00,1,68.00,24.00,Billetera digital,4,6,true,true,false
+V0047,2026-03-19,jueves,Polanco,C051,Matcha latte,Té e infusiones,77.90,2,155.80,58.00,Transferencia,4,7,true,false,false
+V0048,2026-01-26,lunes,Condesa,C045,Americano,Café,49.40,2,98.80,36.00,Tarjeta,5,3,false,true,false
+V0049,2026-03-10,martes,Polanco,C056,Cold brew,Café frío,77.70,1,77.70,26.00,Efectivo,3,5,false,true,false
+V0050,2026-01-23,viernes,Polanco,C042,Panqué de limón,Panadería,47.25,4,189.00,68.00,Billetera digital,4,3,true,false,false
+V0051,2026-02-01,domingo,Condesa,C034,Brownie de chocolate,Postres,57.75,1,57.75,22.00,Billetera digital,4,3,false,true,false
+V0052,2026-02-13,viernes,Polanco,C072,Latte vainilla,Café,76.00,2,152.00,54.00,Transferencia,3,6,false,true,false
+V0053,2026-01-31,sábado,Condesa,C055,Panqué de limón,Panadería,47.25,2,89.77,34.00,Billetera digital,5,2,false,false,true
+V0054,2026-03-12,jueves,Condesa,C025,Flat white,Café,72.00,2,136.80,50.00,Efectivo,3,5,true,true,true
+V0055,2026-01-28,miércoles,Roma Norte,C036,Panqué de limón,Panadería,42.75,1,42.75,17.00,Efectivo,5,2,false,false,false
+V0056,2026-01-06,martes,Roma Norte,C061,Toast de aguacate,Alimentos,134.40,2,268.80,122.00,Billetera digital,3,11,false,true,false
+V0057,2026-03-03,martes,Roma Norte,C073,Cold brew,Café frío,70.30,1,70.30,26.00,Efectivo,4,4,true,false,false
+V0058,2026-02-08,domingo,Condesa,C039,Americano,Café,52.00,1,52.00,18.00,Transferencia,5,4,false,true,false
+V0059,2026-03-17,martes,Roma Norte,C021,Toast de aguacate,Alimentos,128.00,1,128.00,61.00,Tarjeta,5,9,false,false,false
+V0060,2026-01-01,jueves,Condesa,C034,Cold brew,Café frío,74.00,2,148.00,52.00,Efectivo,5,3,false,true,false
+V0061,2026-03-22,domingo,Roma Norte,C057,Matcha latte,Té e infusiones,82.00,2,155.80,58.00,Billetera digital,5,6,true,true,true
+V0062,2026-01-16,viernes,Roma Norte,C042,Frappé moka,Café frío,93.45,1,93.45,33.00,Transferencia,3,7,false,true,false
+V0063,2026-03-19,jueves,Roma Norte,C061,Latte vainilla,Café,72.20,1,72.20,27.00,Efectivo,5,5,false,false,false
+V0064,2026-03-08,domingo,Condesa,C043,Croissant de mantequilla,Panadería,51.45,3,154.35,60.00,Transferencia,5,3,true,false,false
+V0065,2026-02-11,miércoles,Roma Norte,C015,Croissant de mantequilla,Panadería,51.45,3,154.35,60.00,Billetera digital,5,3,true,false,false
+V0066,2026-02-21,sábado,Roma Norte,C081,Brownie de chocolate,Postres,52.25,2,104.50,44.00,Transferencia,3,4,true,false,false
+V0067,2026-02-26,jueves,Roma Norte,C040,Panqué de limón,Panadería,47.25,1,47.25,17.00,Efectivo,3,5,false,false,false
+V0068,2026-03-12,jueves,Condesa,C054,Espresso doble,Café,48.00,1,45.60,17.00,Billetera digital,4,2,true,false,true
+V0069,2026-03-03,martes,Condesa,C001,Toast de aguacate,Alimentos,128.00,1,128.00,61.00,Billetera digital,5,9,false,true,false
+V0070,2026-02-06,viernes,Roma Norte,C059,Panqué de limón,Panadería,47.25,2,94.50,34.00,Transferencia,4,5,false,false,false
+V0071,2026-02-11,miércoles,Polanco,C085,Brownie de chocolate,Postres,57.75,4,231.00,88.00,Transferencia,2,5,true,true,false
+V0072,2026-03-25,miércoles,Condesa,C002,Toast de aguacate,Alimentos,121.60,1,121.60,61.00,Transferencia,5,7,true,true,false
+V0073,2026-01-19,lunes,Roma Norte,C041,Cold brew,Café frío,74.00,2,148.00,52.00,Transferencia,5,2,true,true,false
+V0074,2026-03-22,domingo,Polanco,C013,Panqué de limón,Panadería,45.00,2,76.50,34.00,Transferencia,5,3,false,true,true
+V0075,2026-03-23,lunes,Condesa,C022,Croissant de mantequilla,Panadería,46.55,1,41.89,20.00,Efectivo,4,3,true,true,true
+V0076,2026-01-23,viernes,Condesa,C033,Americano,Café,52.00,3,156.00,54.00,Transferencia,3,5,false,true,false
+V0077,2026-03-27,viernes,Polanco,C059,Espresso doble,Café,50.40,2,100.80,34.00,Billetera digital,5,4,false,false,false
+V0078,2026-02-08,domingo,Roma Norte,C036,Cappuccino,Café,68.00,1,68.00,24.00,Transferencia,5,4,false,true,false
+V0079,2026-01-02,viernes,Roma Norte,C029,Té chai latte,Té e infusiones,73.50,2,147.00,46.00,Billetera digital,5,7,false,true,false
+V0080,2026-03-23,lunes,Polanco,C040,Cappuccino,Café,68.00,1,68.00,24.00,Tarjeta,5,3,false,false,false
+V0081,2026-02-26,jueves,Polanco,C022,Espresso doble,Café,50.40,1,50.40,17.00,Billetera digital,3,4,true,false,false
+V0082,2026-02-02,lunes,Roma Norte,C051,Sándwich artesanal,Alimentos,109.25,3,327.75,162.00,Efectivo,4,11,false,true,false
+V0083,2026-03-13,viernes,Roma Norte,C061,Flat white,Café,72.00,2,144.00,50.00,Efectivo,4,5,true,true,false
+V0084,2026-01-04,domingo,Roma Norte,C015,Croissant de mantequilla,Panadería,51.45,3,154.35,60.00,Transferencia,5,2,true,false,false
+V0085,2026-01-18,domingo,Condesa,C076,Espresso doble,Café,48.00,1,48.00,17.00,Transferencia,4,2,false,true,false
+V0086,2026-01-20,martes,Roma Norte,C057,Sándwich artesanal,Alimentos,115.00,2,230.00,108.00,Transferencia,2,11,false,false,false
+V0087,2026-01-31,sábado,Polanco,C012,Brownie de chocolate,Postres,55.00,1,55.00,22.00,Transferencia,2,4,false,true,false
+V0088,2026-03-26,jueves,Roma Norte,C076,Cappuccino,Café,68.00,2,136.00,48.00,Efectivo,5,8,false,true,false
+V0089,2026-01-28,miércoles,Roma Norte,C015,Cheesecake frutos rojos,Postres,78.00,1,78.00,32.00,Efectivo,5,8,false,false,false
+V0090,2026-03-26,jueves,Roma Norte,C068,Brownie de chocolate,Postres,52.25,1,52.25,22.00,Transferencia,3,5,true,false,false
+V0091,2026-01-15,jueves,Polanco,C059,Panqué de limón,Panadería,45.00,1,38.25,17.00,Billetera digital,5,5,false,true,true
+V0092,2026-03-24,martes,Condesa,C042,Toast de aguacate,Alimentos,134.40,1,134.40,61.00,Tarjeta,5,10,false,true,false
+V0093,2026-03-19,jueves,Condesa,C015,Cappuccino,Café,71.40,1,71.40,24.00,Tarjeta,5,3,false,false,false
+V0094,2026-03-25,miércoles,Polanco,C054,Croissant de mantequilla,Panadería,49.00,2,98.00,40.00,Transferencia,4,3,false,true,false
+V0095,2026-01-13,martes,Roma Norte,C017,Latte vainilla,Café,79.80,1,79.80,27.00,Billetera digital,2,6,true,false,false
+V0096,2026-03-13,viernes,Polanco,C077,Espresso doble,Café,50.40,3,151.20,51.00,Billetera digital,5,3,false,false,false
+V0097,2026-02-09,lunes,Condesa,C072,Flat white,Café,72.00,2,136.80,50.00,Transferencia,5,2,true,false,true
+V0098,2026-03-21,sábado,Roma Norte,C044,Croissant de mantequilla,Panadería,49.00,2,98.00,40.00,Billetera digital,2,5,true,false,false
+V0099,2026-02-14,sábado,Condesa,C048,Espresso doble,Café,45.60,3,136.80,51.00,Efectivo,3,2,false,true,false
+V0100,2026-02-09,lunes,Roma Norte,C063,Panqué de limón,Panadería,42.75,2,81.22,34.00,Transferencia,5,2,false,true,true
+V0101,2026-03-19,jueves,Roma Norte,C051,Cold brew,Café frío,74.00,1,74.00,26.00,Efectivo,5,2,false,true,false
+V0102,2026-03-18,miércoles,Roma Norte,C023,Espresso doble,Café,48.00,1,48.00,17.00,Transferencia,4,2,false,false,false
+V0103,2026-01-17,sábado,Condesa,C041,Cold brew,Café frío,70.30,2,140.60,52.00,Tarjeta,4,2,false,false,false
+V0104,2026-03-15,domingo,Polanco,C047,Frappé moka,Café frío,89.00,1,89.00,33.00,Transferencia,3,5,false,true,false
+V0105,2026-01-12,lunes,Condesa,C045,Cold brew,Café frío,74.00,1,66.60,26.00,Efectivo,3,3,false,true,true
+V0106,2026-02-14,sábado,Roma Norte,C023,Panqué de limón,Panadería,45.00,2,90.00,34.00,Tarjeta,3,2,false,true,false
+V0107,2026-03-22,domingo,Roma Norte,C081,Frappé moka,Café frío,89.00,2,178.00,66.00,Transferencia,5,6,false,true,false
+V0108,2026-02-08,domingo,Polanco,C083,Cheesecake frutos rojos,Postres,74.10,2,148.20,64.00,Tarjeta,2,7,true,true,false
+V0109,2026-01-12,lunes,Roma Norte,C065,Matcha latte,Té e infusiones,77.90,1,77.90,29.00,Transferencia,4,6,false,true,false
+V0110,2026-01-20,martes,Roma Norte,C057,Toast de aguacate,Alimentos,121.60,1,121.60,61.00,Efectivo,4,7,false,false,false
+V0111,2026-02-26,jueves,Roma Norte,C013,Té chai latte,Té e infusiones,70.00,2,140.00,46.00,Billetera digital,5,7,true,false,false
+V0112,2026-03-13,viernes,Condesa,C045,Croissant de mantequilla,Panadería,49.00,1,49.00,20.00,Efectivo,4,4,false,false,false
+V0113,2026-02-09,lunes,Roma Norte,C083,Toast de aguacate,Alimentos,128.00,2,256.00,122.00,Tarjeta,4,9,false,false,false
+V0114,2026-03-27,viernes,Roma Norte,C038,Cold brew,Café frío,74.00,1,66.60,26.00,Tarjeta,3,2,true,true,true
+V0115,2026-01-13,martes,Condesa,C057,Frappé moka,Café frío,89.00,1,89.00,33.00,Efectivo,4,7,false,true,false
+V0116,2026-01-06,martes,Roma Norte,C025,Cold brew,Café frío,77.70,2,155.40,52.00,Transferencia,3,3,true,true,false
+V0117,2026-02-17,martes,Roma Norte,C007,Croissant de mantequilla,Panadería,51.45,2,102.90,40.00,Billetera digital,5,5,false,false,false
+V0118,2026-03-24,martes,Polanco,C058,Frappé moka,Café frío,84.55,1,84.55,33.00,Billetera digital,4,4,false,false,false
+V0119,2026-03-07,sábado,Roma Norte,C011,Cappuccino,Café,68.00,1,68.00,24.00,Transferencia,5,3,false,true,false
+V0120,2026-02-17,martes,Roma Norte,C018,Cappuccino,Café,68.00,1,68.00,24.00,Transferencia,3,5,true,false,false
+V0121,2026-03-02,lunes,Roma Norte,C082,Cold brew,Café frío,77.70,1,77.70,26.00,Transferencia,3,2,true,true,false
+V0122,2026-03-21,sábado,Roma Norte,C079,Frappé moka,Café frío,89.00,1,75.65,33.00,Tarjeta,5,8,false,false,true
+V0123,2026-02-15,domingo,Condesa,C050,Latte vainilla,Café,72.20,1,72.20,27.00,Tarjeta,5,3,false,true,false
+V0124,2026-03-02,lunes,Polanco,C075,Espresso doble,Café,45.60,1,45.60,17.00,Tarjeta,4,2,true,false,false
+V0125,2026-02-12,jueves,Roma Norte,C005,Americano,Café,54.60,1,54.60,18.00,Transferencia,5,3,true,false,false
+V0126,2026-02-07,sábado,Condesa,C005,Cappuccino,Café,71.40,2,142.80,48.00,Billetera digital,5,5,false,true,false
+V0127,2026-03-24,martes,Condesa,C044,Cappuccino,Café,64.60,1,64.60,24.00,Transferencia,5,3,false,false,false
+V0128,2026-01-24,sábado,Condesa,C070,Frappé moka,Café frío,93.45,1,93.45,33.00,Efectivo,3,7,false,true,false
+V0129,2026-02-07,sábado,Polanco,C079,Flat white,Café,75.60,1,75.60,25.00,Billetera digital,3,2,false,true,false
+V0130,2026-02-25,miércoles,Polanco,C004,Latte vainilla,Café,76.00,4,304.00,108.00,Efectivo,4,7,false,true,false
+V0131,2026-01-19,lunes,Roma Norte,C048,Brownie de chocolate,Postres,55.00,2,110.00,44.00,Transferencia,4,5,false,true,false
+V0132,2026-02-17,martes,Roma Norte,C064,Cold brew,Café frío,74.00,1,74.00,26.00,Efectivo,4,2,true,true,false
+V0133,2026-03-08,domingo,Roma Norte,C058,Cold brew,Café frío,74.00,2,148.00,52.00,Tarjeta,5,4,true,true,false
+V0134,2026-01-23,viernes,Condesa,C039,Sándwich artesanal,Alimentos,115.00,1,115.00,54.00,Billetera digital,5,8,true,false,false
+V0135,2026-01-21,miércoles,Condesa,C071,Panqué de limón,Panadería,42.75,3,128.25,51.00,Billetera digital,5,4,false,false,false
+V0136,2026-03-15,domingo,Condesa,C053,Cold brew,Café frío,77.70,2,139.86,52.00,Transferencia,5,2,false,false,true
+V0137,2026-03-15,domingo,Condesa,C056,Americano,Café,52.00,4,208.00,72.00,Efectivo,3,5,false,true,false
+V0138,2026-03-06,viernes,Polanco,C011,Sándwich artesanal,Alimentos,115.00,1,103.50,54.00,Billetera digital,4,7,true,true,true
+V0139,2026-02-02,lunes,Roma Norte,C073,Cappuccino,Café,64.60,3,193.80,72.00,Billetera digital,4,7,true,false,false
+V0140,2026-01-06,martes,Condesa,C064,Brownie de chocolate,Postres,55.00,1,55.00,22.00,Tarjeta,5,8,true,false,false
+V0141,2026-03-22,domingo,Condesa,C060,Té chai latte,Té e infusiones,73.50,2,147.00,46.00,Transferencia,4,5,true,true,false
+V0142,2026-01-27,martes,Roma Norte,C066,Flat white,Café,72.00,1,72.00,25.00,Billetera digital,5,4,false,true,false
+V0143,2026-03-13,viernes,Polanco,C042,Americano,Café,52.00,1,49.40,18.00,Efectivo,5,5,true,true,true
+V0144,2026-03-15,domingo,Roma Norte,C065,Panqué de limón,Panadería,45.00,1,45.00,17.00,Transferencia,4,2,true,false,false
+V0145,2026-02-28,sábado,Roma Norte,C047,Toast de aguacate,Alimentos,134.40,1,134.40,61.00,Billetera digital,4,10,true,true,false
+V0146,2026-02-21,sábado,Condesa,C080,Cold brew,Café frío,70.30,1,70.30,26.00,Billetera digital,4,3,false,true,false
+V0147,2026-03-29,domingo,Condesa,C005,Croissant de mantequilla,Panadería,49.00,1,49.00,20.00,Tarjeta,5,4,true,true,false
+V0148,2026-01-18,domingo,Condesa,C051,Panqué de limón,Panadería,45.00,2,90.00,34.00,Efectivo,4,4,false,true,false
+V0149,2026-03-20,viernes,Roma Norte,C075,Panqué de limón,Panadería,45.00,1,45.00,17.00,Transferencia,4,4,true,false,false
+V0150,2026-02-09,lunes,Condesa,C068,Cheesecake frutos rojos,Postres,78.00,2,156.00,64.00,Efectivo,5,8,false,true,false

@@ -1,2 +1,7 @@
-streamlit>=1.40,<2.0
-pandas>=2.2,<3.0
+streamlit
+matplotlib
+seaborn
+pandas
+ipython
+ipykernel
+jupyter 
